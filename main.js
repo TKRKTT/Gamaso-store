@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BLOCO 2: GERAÇÃO DINÂMICA DOS CARDS DE PRODUTO ---
     // Array de objetos que define os dados de cada produto.
-    // Alterar este array é o único passo necessário para adicionar, remover ou modificar produtos na página.
     const products = [
         { title: "Produto 1" },
         { title: "Produto 2" },
@@ -44,14 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productGrid) {
         // Itera sobre o array de produtos para criar um card para cada um.
         products.forEach((product) => {
-            // Cria o elemento <article> que servirá como o card do produto.
-            const productElement = document.createElement('article');
-            // Adiciona a classe 'reveal', preparando o card para a animação de rolagem.
-            productElement.classList.add('reveal');
+            // 1. Cria um elemento de link <a> em vez de <article>
+            const productLink = document.createElement('a');
+
+            // 2. Define o link do WhatsApp com uma mensagem personalizada para o produto
+            const message = `Olá, tenho interesse no ${product.title}!`;
+            productLink.href = `https://wa.me/558299911138?text=${encodeURIComponent(message)}`;
             
-            // ===== ALTERAÇÃO AQUI =====
-            // Define o conteúdo HTML do card com as classes ajustadas para um visual mais compacto.
-            productElement.innerHTML = `
+            // 3. Define atributos importantes para o link
+            productLink.target = '_blank'; // Abre em uma nova aba
+            productLink.rel = 'noopener noreferrer';
+            productLink.classList.add('reveal'); // Adiciona a classe para a animação de rolagem
+
+            // 4. Insere o conteúdo visual do card DENTRO do link
+            productLink.innerHTML = `
                 <div class="group product-card-hover text-left h-full">
                     <div class="bg-brand-gray border border-brand-gold/20 rounded-lg shadow-lg overflow-hidden h-full flex flex-col p-4">
                         <img src="https://placehold.co/400x400/0a0a0a/D4AF37?text=${encodeURI(product.title)}" 
@@ -65,8 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            // Adiciona o card recém-criado como um filho do grid de produtos.
-            productGrid.appendChild(productElement);
+            
+            // 5. Adiciona o link (com o card dentro) ao grid de produtos
+            productGrid.appendChild(productLink);
         });
     }
 
